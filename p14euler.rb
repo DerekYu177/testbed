@@ -34,4 +34,4 @@ max_length = 0
   ms = "[%9s]" % max_seed
   ml = "[%9s]" % max_length
   p "#{s} #{l} #{ms}, #{ml}"
-end
+git end
