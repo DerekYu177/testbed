@@ -8,16 +8,16 @@ class Problem
   end
 
   def repetitive_length(number) # decimal input
-    number.to_s.length.times do |i| # i is the number of repeated digits
-      next if i == 0
+    n = number.to_s[2..-1] # remove "0."
 
-      # if result is a whole number (followed by 0's), then we have the right number
-      result = ((number*10**i) - number) % 1
-      error = 1 - result
+    return 0 if n.length == 1 # handles where there is no reptition
 
-      p error
-
-      return i if error < ERROR
+    n.length.times do |index|
+      if n[index] == n[0]
+        (index).times do |i|
+          return index if n[index + i] == n[i]
+        end
+      end
     end
   end
 
