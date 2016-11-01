@@ -1,12 +1,15 @@
 class Problem
-  A_MAX = 10
-  B_MAX = 10
+  A_MAX = 1000
+  B_MAX = 1000
   UPPER_LIMIT = 100
 
   def initialize
     @prime_net = []
-
     @prime_params = []
+    @max_length = 0
+
+    initialize_prime_params
+
     p loop_though
     p @prime_params
   end
@@ -14,13 +17,14 @@ class Problem
   def loop_though
     max_a = 0
     max_b = 0
-    max_length = 0
     (-A_MAX...A_MAX).each do |a|
       (-B_MAX...B_MAX).each do |b|
         length = quadratic_prime_length(a, b)
-        @prime_params << Array.new([a, b, length])
-        if length > max_length
-          max_length = length
+
+        if length > @max_length
+          p [a, b, length]
+          @prime_params << Array.new([a, b, length])
+          @max_length = length
           max_a = a
           max_b = b
         end
@@ -35,13 +39,12 @@ class Problem
     return 0 unless is_prime?(b)
 
     count = 0
-    (0...UPPER_LIMIT).each do |n|
-      p "#{n}^2 + #{a*n} + #{b}"
-      value = prime_equation(a, b, n)
-      break unless is_prime?(value)
+    iterator = 0
+    while is_prime?(prime_equation(a, b, iterator))
       count = count + 1
-      p "#{value} is prime"
+      iterator = iterator + 1
     end
+
     count
   end
 
@@ -56,6 +59,7 @@ class Problem
 
     unless @prime_net.empty?
       @prime_net.each do |prime|
+        next if prime >= value
         return false if value % prime == 0 # optimization
       end
     end
@@ -64,8 +68,14 @@ class Problem
       return false if value % int == 0 # brute force
     end
 
-    @prime_net << value
+    @prime_net << value unless @prime_net.include?(value)
     true
+  end
+
+  def initialize_prime_params
+    (0...1000).each do |int|
+      is_prime?(int)
+    end
   end
 end
 
